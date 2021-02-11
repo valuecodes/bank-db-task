@@ -1,23 +1,30 @@
-import { BankAccount } from "./classes/BankAccount";
-import { Database } from "./classes/Database";
-import { Key } from "./classes/Key";
+import { RealPlayer } from './classes/RealPlayer';
+import { BotPlayer } from "./classes/BotPlayer";
+import { CardDealer } from './classes/CardDealer';
 
-let db = new Database()
 
-let firstKey = new Key(12345)
-let firstAccount = new BankAccount(5000, firstKey)
-let firstResult = db.insert(firstAccount)
+const players = [
+    new BotPlayer(5),
+    new BotPlayer(5),
+    new RealPlayer(5)
+]
 
-let secondKey = new Key(5678)
-let secondAccount = new BankAccount(1000,secondKey)
-let secondResult = db.insert(secondAccount)
+const dealer = new CardDealer(52);
 
-let thirdKey = new Key(12345213)
-let thirdAccount = new BankAccount(5000, thirdKey)
-let thirdResult = db.insert(thirdAccount)
+players.forEach(player => {
+    let counter = 3;
+    while (Boolean(counter--)) {
+        console.log(player)
+        dealer.dealTo(player);
+    }
+})
 
-let lookAccount = db.find(secondKey)
+players.forEach(player => {
+    while(player.requestCard()) {
+        dealer.dealTo(player);
+    }
+})
 
-db.delete(secondKey)
-
-console.log(db,lookAccount)
+players.forEach(player => {
+    console.log(player.reviewCards())
+})
